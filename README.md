@@ -2,7 +2,7 @@ This project was bootstrapped with [Create Eth App](https://github.com/paulrberg
 
 ## IPFS Example App
 ## Deploy this contract and copy its address to packages>contracts>src>addresses.js
-
+```bash
 pragma solidity ^0.6.11;
 
 contract IpfsStorage {
@@ -12,12 +12,12 @@ contract IpfsStorage {
         userFiles[msg.sender] = file;
     }
 }
-
+ ```
 ```bash
 
 brew install yarn
 
-cd my-eth-app
+cd eth-app
   
 cd packages
 
