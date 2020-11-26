@@ -23,3 +23,13 @@
   color: #61dafb;
   margin-top: 10px;
 }
+
+.mark-red {
+    color:#ff0000;
+    background: none;
+}
+.mark-yellow {
+  color:#ffee00;
+  background: none;
+}
+
