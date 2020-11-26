@@ -18,12 +18,8 @@ const ipfsContract = new ethers.Contract(
   abis.ipfs,
   defaultProvider
 );
-const storageContract = new ethers.Contract(
-  addresses.storage,
-  abis.storage,
-  defaultProvider
-);
-
+var storageContract;
+console.log( addresses.ipfs);
 
 async function initIpfs() {
   node = await IPFS.create();
@@ -104,8 +100,30 @@ function App() {
   
   }
 
+  function SetContract() {
+
+    storageContract = new ethers.Contract(itemInput2, abis.storage, defaultProvider);
+
+    console.log(itemInput2);
+    console.log(abis.storage);
+    console.log(storageContract);
+
+
+
+
+
+    return storageContract;
+  
+  }
+
+
+  
+  
+
 
   async function Buyer() {
+    console.log(storageContract);
+
 
     
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
@@ -117,7 +135,8 @@ function App() {
 
   async function Seller() {
 
-    
+    console.log(storageContract);
+
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
     
     await storageWithSigner.sellerUpload(ipfsHash);
@@ -125,6 +144,7 @@ function App() {
   
   }
   async function Set() {
+    console.log(storageContract);
 
     
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
@@ -134,13 +154,16 @@ function App() {
   }
   async function Extend() {
 
-    
+    console.log(storageContract);
+
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
     
     await storageWithSigner.ExtendTime(itemInput1);
 
   
   }
+  
+
   
   console.log(ipfsHash);
   
@@ -173,6 +196,8 @@ function App() {
   console.log(itemInput);
   const [itemInput1, setItemInput1] = useState("");
   console.log(itemInput1);
+  const [itemInput2, setItemInput2] = useState("");
+  console.log(itemInput2);
 
 
 
@@ -180,6 +205,15 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+      <div>
+          Smart Contract: 
+
+         
+          <input type="text" placeholder="Contract Hash" value={itemInput2} onChange={e => setItemInput2(e.target.value)}
+        
+          />
+          <button onClick={SetContract}>Fintech Set</button>
+         </div>
         <div {...getRootProps()} style={{ cursor: "pointer" }}>
           <img src={logo} className="App-logo" alt="react-logo" />
           <input {...getInputProps()} />
