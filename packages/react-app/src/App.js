@@ -7,6 +7,9 @@ import logo from "./ethereumLogo.png";
 import { addresses, abis } from "@project/contracts";
 
 import "./App.css";
+
+
+
 const ZERO_ADDRESS =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 
@@ -51,6 +54,8 @@ async function getaccount(){
 
 return account
 }
+
+
 
 function App() {
   const [ipfsHash, setIpfsHash] = useState("");
@@ -102,33 +107,38 @@ function App() {
 
   function SetContract() {
 
+
+      
     storageContract = new ethers.Contract(itemInput2, abis.storage, defaultProvider);
 
     console.log(itemInput2);
     console.log(abis.storage);
     console.log(storageContract);
-
-
-
-
-
     return storageContract;
+      
+    
   
   }
 
 
-  
-  
 
 
   async function Buyer() {
     console.log(storageContract);
-
-
-    
+ 
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
   
-    await storageWithSigner.buyerUpload(ipfsHash);
+    
+
+    try {
+      await storageWithSigner.buyerUpload(ipfsHash);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
   
   }
 
@@ -139,7 +149,17 @@ function App() {
 
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
     
-    await storageWithSigner.sellerUpload(ipfsHash);
+    
+    try {
+      await storageWithSigner.sellerUpload(ipfsHash);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+    
 
   
   }
@@ -148,7 +168,15 @@ function App() {
 
     
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-    await storageWithSigner.SetEndTime(itemInput);
+   
+    try {
+      await storageWithSigner.SetEndTime(itemInput);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").innerHTML = err.message
+    }
 
   
   }
@@ -157,13 +185,19 @@ function App() {
     console.log(storageContract);
 
     const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-    
-    await storageWithSigner.ExtendTime(itemInput1);
 
+    try {
+      await storageWithSigner.ExtendTime(itemInput1);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
   
   }
   
-
   
   console.log(ipfsHash);
   
@@ -202,9 +236,11 @@ function App() {
 
 
 
+
   return (
     <div className="App">
       <header className="App-header">
+      <div id="text-box"></div>
       <div>
           Smart Contract: 
 
@@ -274,7 +310,7 @@ function App() {
          </div>
          <div>Buyer Clicks to Upload to Smart Contract:   <button onClick={Buyer}>Buyer Upload</button></div>
          <div>Seller Clicks to Upload to Smart Contract:   <button onClick={Seller}>Seller Upload</button></div>
-         <script></script>
+
       </header>
 
     </div>
