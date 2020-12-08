@@ -8,8 +8,6 @@ import { addresses, abis } from "@project/contracts";
 
 import "./App.css";
 
-
-
 const ZERO_ADDRESS =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 
@@ -56,7 +54,6 @@ return account
 }
 
 
-
 function App() {
   const [ipfsHash, setIpfsHash] = useState("");
   useEffect(() => {
@@ -74,8 +71,6 @@ function App() {
   }, []);
 
 
-
-
   const [accountHash, setAccountHash] = useState("");
   useEffect(() => {
     window.ethereum.enable();
@@ -91,8 +86,6 @@ function App() {
   }, []);
 
 
-
-
   async function setFile(hash) {
     const ipfsWithSigner = ipfsContract.connect(defaultProvider.getSigner());
     const tx = await ipfsWithSigner.setFile(hash);
@@ -105,33 +98,34 @@ function App() {
   
   }
 
-  function SetContract() {
-
-
-      
+   function SetContract() {
     storageContract = new ethers.Contract(itemInput2, abis.storage, defaultProvider);
-
     console.log(itemInput2);
     console.log(abis.storage);
     console.log(storageContract);
-    return storageContract;
+
       
-    
+    try {
+      if(itemInput2== "") throw "Empty! Enter Smart Contract Hash.";
+      if(isNaN(itemInput2)) throw "Not a number! Enter Smart Contract Hash.";
+      
+    }
+    catch(err) {
+      console.log(err);
+      document.getElementById("text-box").innerHTML = err
+    }
+     
+    return storageContract;
   
   }
 
 
-
-
   async function Buyer() {
-    console.log(storageContract);
- 
-    const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-  
-    
 
+  
     try {
-      await storageWithSigner.buyerUpload(ipfsHash);
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.buyerUpload(ipfsHash,itemInput);
       
     }
     catch(err) {
@@ -145,12 +139,10 @@ function App() {
 
   async function Seller() {
 
-    console.log(storageContract);
 
-    const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-    
     
     try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
       await storageWithSigner.sellerUpload(ipfsHash);
       
     }
@@ -159,34 +151,15 @@ function App() {
       document.getElementById("text-box").innerHTML = err.message
     }
     
-    
-
   
   }
-  async function Set() {
-    console.log(storageContract);
 
-    
-    const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-   
-    try {
-      await storageWithSigner.SetEndTime(itemInput);
-      
-    }
-    catch(err) {
-      console.log(err.message);
-      document.getElementById("text-box").innerHTML = err.message
-    }
-
-  
-  }
   async function Extend() {
 
-    console.log(storageContract);
 
-    const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
 
     try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
       await storageWithSigner.ExtendTime(itemInput1);
       
     }
@@ -197,7 +170,76 @@ function App() {
     
   
   }
+
+
+  async function status() {
+
+    var status_array=["ON", "BUYER_UPLOADED", "SELLER_UPLOADED", "DOC_OK", "DOC_DEFECT", "DOC_REJECTED"];
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+
+      var statust = await storageWithSigner.getStatus();
+
+      document.getElementById("text-box1").innerHTML = status_array[statust]
+      return 
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+    
   
+  }
+
+
+  async function time() {
+
+    var time_array=["ON_TIME", "OUT_OF_TIME"];
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+
+      var timet = await storageWithSigner.getTimeStatus();
+
+      document.getElementById("text-box2").innerHTML = time_array[timet]
+      return 
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+    
+  
+  }
+  
+
+  async function getContractFile() {
+
+    
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+
+      var contractfile = await storageWithSigner.See_Doc_Hash(itemInput3);
+      document.getElementById("myAnchor").innerHTML ="See Contract File";
+      document.getElementById("myAnchor").href = `https://ipfs.io/ipfs/${contractfile}`;
+      document.getElementById("myAnchor").target = "_blank";
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").innerHTML = err.message
+    }
+
+       
+  
+  }
   
   console.log(ipfsHash);
   
@@ -232,9 +274,8 @@ function App() {
   console.log(itemInput1);
   const [itemInput2, setItemInput2] = useState("");
   console.log(itemInput2);
-
-
-
+  const [itemInput3, setItemInput3] = useState("");
+  console.log(itemInput3);
 
 
   return (
@@ -242,14 +283,15 @@ function App() {
       <header className="App-header">
       <div id="text-box"></div>
       <div>
-          Smart Contract: 
+          Smart Contract: <input type="text" placeholder="Contract Hash" value={itemInput2} onChange={e => setItemInput2(e.target.value)}/>
+        <button onClick={SetContract}>Set</button>
+      </div>
+      <div> <button onClick={status}>See Current Status</button> <button onClick={time}>See Current Time</button> </div>
+      
+      <div id="text-box1"></div>
+      
+      <div id="text-box2"></div>
 
-         
-          <input type="text" placeholder="Contract Hash" value={itemInput2} onChange={e => setItemInput2(e.target.value)}
-        
-          />
-          <button onClick={SetContract}>Fintech Set</button>
-         </div>
         <div {...getRootProps()} style={{ cursor: "pointer" }}>
           <img src={logo} className="App-logo" alt="react-logo" />
           <input {...getInputProps()} />
@@ -265,13 +307,13 @@ function App() {
         
         <div>
           {ipfsHash !== "" ? (   
-            <p>IPFS Hash: <mark className="mark-red">"{ipfsHash}"</mark></p>
+            <p>Current IPFS Hash: <mark className="mark-red">"{ipfsHash}"</mark></p>
             ) : (
               ""
             )}
         
         </div>  
-        <div>User Hash:<mark className="mark-yellow">{accountHash}</mark></div>
+        <div>Current User Hash:<mark className="mark-yellow">{accountHash}</mark></div>
    
         <div>
           {ipfsHash !== "" ? (
@@ -290,31 +332,34 @@ function App() {
           )}
 
         </div>
-        <div>Buyer Can Set and Extend Time</div>
-      
         <div>
-          Set End Time:
+         Buyer Sets Time and Uploads to The Smart Contract: <input type="text" placeholder="Enter Time" value={itemInput} onChange={e => setItemInput(e.target.value)}/>
+         <button onClick={Buyer}>Buyer Upload</button>
+        </div>
+        <div></div>
+      
 
-         
-          <input type="text" placeholder="Enter an item" value={itemInput} onChange={e => setItemInput(e.target.value)}
-        
-          />
-          <button onClick={Set}>Buyer Set</button>
+        <div>
+        Buyer Extends Time:
+        <input type="text" placeholder="Enter Time" value={itemInput1} onChange={e => setItemInput1(e.target.value)}
+       
+        />
+        <button onClick={Extend}>Buyer Extend</button>
+       </div>
+         <div>Seller Uploads to The Smart Contract: <button onClick={Seller}>Seller Upload</button>
          </div>
          <div>
-          Extend Time:
-          <input type="text" placeholder="Enter an item" value={itemInput1} onChange={e => setItemInput1(e.target.value)}
-         
-          />
-          <button onClick={Extend}>Buyer Extend</button>
+          Smart Contract Files: <input type="text" placeholder="Enter Hash" value={itemInput3} onChange={e => setItemInput3(e.target.value)}/>
+        <button onClick={getContractFile}>See Contract Files</button>
          </div>
-         <div>Buyer Clicks to Upload to Smart Contract:   <button onClick={Buyer}>Buyer Upload</button></div>
-         <div>Seller Clicks to Upload to Smart Contract:   <button onClick={Seller}>Seller Upload</button></div>
+         <a id="myAnchor" href=""></a>
+
 
       </header>
 
     </div>
   );
+          
   
 }
 
