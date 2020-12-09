@@ -3,8 +3,8 @@
 }
 
 .App-logo {
-  height: 40vmin;
-  margin-bottom: 16px;
+  height: 25vmin;
+  margin-bottom: 5px;
   pointer-events: none;
 }
 
@@ -15,17 +15,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(5px + 2vmin);
   color: white;
 }
 
 .App-link {
   color: #61dafb;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .mark-red {
-    color:#ff0000;
+    color:	#980000  ;
     background: none;
 }
 .mark-yellow {
@@ -33,3 +33,50 @@
   background: none;
 }
 
+.buyer{
+  width : 50%; 
+  height : 50%;
+  border : 5px solid #191b1f;
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(25, 27, 31, 0.3);
+}
+
+.seller{
+  width : 50%; 
+  height : 50%;
+  border : 5px solid #191b1f;
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(25, 27, 31, 0.3);
+}
+
+.fintech{
+  width : 50%; 
+  height : 50%;
+  border : 5px solid #191b1f;
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(25, 27, 31, 0.3);
+}
+
+.info{
+  width : 50%; 
+  height : 50%;
+  border : 5px solid #191b1f;
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(25, 27, 31, 0.3);
+}
+
+.files{
+  width : 50%; 
+  height : 50%;
+  border : 5px solid #191b1f;
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(25, 27, 31, 0.3);
+}
+.color-red{
+  color: #F00;
+}

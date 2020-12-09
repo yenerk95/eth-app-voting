@@ -12,7 +12,7 @@ const ZERO_ADDRESS =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 let node;
-
+ 
 const defaultProvider = new ethers.providers.Web3Provider(window.ethereum);
 const ipfsContract = new ethers.Contract(
   addresses.ipfs,
@@ -82,8 +82,10 @@ function App() {
 
       if (file1 !== ZERO_ADDRESS) setAccountHash(file1);
     }
+     
     readFile();
   }, []);
+
 
 
   async function setFile(hash) {
@@ -112,6 +114,8 @@ function App() {
     }
     catch(err) {
       console.log(err);
+      document.getElementById("text-box").className = "color-red";
+
       document.getElementById("text-box").innerHTML = err
     }
      
@@ -130,6 +134,7 @@ function App() {
     }
     catch(err) {
       console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
       document.getElementById("text-box").innerHTML = err.message
     }
     
@@ -148,6 +153,7 @@ function App() {
     }
     catch(err) {
       console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
       document.getElementById("text-box").innerHTML = err.message
     }
     
@@ -165,6 +171,7 @@ function App() {
     }
     catch(err) {
       console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
       document.getElementById("text-box").innerHTML = err.message
     }
     
@@ -175,49 +182,120 @@ function App() {
   async function status() {
 
     var status_array=["ON", "BUYER_UPLOADED", "SELLER_UPLOADED", "DOC_OK", "DOC_DEFECT", "DOC_REJECTED"];
-
-
-    try {
-      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-
-      var statust = await storageWithSigner.getStatus();
-
-      document.getElementById("text-box1").innerHTML = status_array[statust]
-      return 
-      
-    }
-    catch(err) {
-      console.log(err.message);
-      document.getElementById("text-box").innerHTML = err.message
-    }
-    
-    
-  
-  }
-
-
-  async function time() {
-
     var time_array=["ON_TIME", "OUT_OF_TIME"];
 
 
     try {
       const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
 
+      var balance = await storageWithSigner.check_Contract_Balance();
+
+      var statust = await storageWithSigner.getStatus();
+
       var timet = await storageWithSigner.getTimeStatus();
 
-      document.getElementById("text-box2").innerHTML = time_array[timet]
+      document.getElementById("text-box1").innerHTML = "Status: "+status_array[statust] +"  Time: "+ time_array[timet] +"  Balance: "+ balance
       return 
       
     }
     catch(err) {
       console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
       document.getElementById("text-box").innerHTML = err.message
     }
     
     
   
   }
+
+
+
+  async function compliancetrue() {
+
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.setCompliance(true);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+  
+  }
+
+  async function compliancefalse() {
+
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.setCompliance(false);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+  
+  }
+
+  async function waivetrue() {
+
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.waiveDiscrepancies(true);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+  
+  }
+
+  async function waivefalse() {
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.waiveDiscrepancies(false);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
+      document.getElementById("text-box").innerHTML = err.message
+    }   
+  
+  }
+  async function destroy() {
+
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.destroycontract(false);
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+  
+  }
+
   
 
   async function getContractFile() {
@@ -234,6 +312,7 @@ function App() {
     }
     catch(err) {
       console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
       document.getElementById("text-box").innerHTML = err.message
     }
 
@@ -277,50 +356,49 @@ function App() {
   const [itemInput3, setItemInput3] = useState("");
   console.log(itemInput3);
 
+  
+
 
   return (
     <div className="App">
       <header className="App-header">
       <div id="text-box"></div>
+      <body className="info">
       <div>
           Smart Contract: <input type="text" placeholder="Contract Hash" value={itemInput2} onChange={e => setItemInput2(e.target.value)}/>
         <button onClick={SetContract}>Set</button>
       </div>
-      <div> <button onClick={status}>See Current Status</button> <button onClick={time}>See Current Time</button> </div>
+      <div>Current User Hash: <mark className="mark-red">{accountHash}</mark></div>
+
+      <div> <button onClick={status}>See Current Status</button> </div>
       
       <div id="text-box1"></div>
-      
-      <div id="text-box2"></div>
+      </body>
 
-        <div {...getRootProps()} style={{ cursor: "pointer" }}>
+
+        <div {...getRootProps()} style={{"width" : "50%", "height" : "50%", "border" : "5px solid #191b1f", "margin" : "5px","padding" : "5px",cursor: "pointer", "background-color" :"rgb(25, 27, 31, 0.3)"}}>
           <img src={logo} className="App-logo" alt="react-logo" />
           <input {...getInputProps()} />
           {isDragActive ? (
-            <p>Drop the files here ...</p>
+            <div>Drop the files here ...</div>
           ) : (
-            <p>
+            <div>
               Drag 'n' drop some files here to upload to IPFS (or click the
               logo)
-            </p>
+            </div>
           )}
+
         </div>
-        
-        <div>
-          {ipfsHash !== "" ? (   
-            <p>Current IPFS Hash: <mark className="mark-red">"{ipfsHash}"</mark></p>
+        <body className="files">
+
+        {ipfsHash !== "" ? (   
+            <div>Current IPFS Hash: <mark className="mark-red">"{ipfsHash}"</mark></div>
             ) : (
               ""
             )}
-        
-        </div>  
-        <div>Current User Hash:<mark className="mark-yellow">{accountHash}</mark></div>
-   
         <div>
           {ipfsHash !== "" ? (
-            
-
             <a
-            
               href={`https://ipfs.io/ipfs/${ipfsHash}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -332,6 +410,8 @@ function App() {
           )}
 
         </div>
+        </body>
+        <body className="buyer">
         <div>
          Buyer Sets Time and Uploads to The Smart Contract: <input type="text" placeholder="Enter Time" value={itemInput} onChange={e => setItemInput(e.target.value)}/>
          <button onClick={Buyer}>Buyer Upload</button>
@@ -341,25 +421,36 @@ function App() {
 
         <div>
         Buyer Extends Time:
-        <input type="text" placeholder="Enter Time" value={itemInput1} onChange={e => setItemInput1(e.target.value)}
-       
-        />
+        <input type="text" placeholder="Enter Time" value={itemInput1} onChange={e => setItemInput1(e.target.value)}/>
         <button onClick={Extend}>Buyer Extend</button>
-       </div>
+        </div>
+        <div>
+           Buyer Waives or Terminates:  <button onClick={waivetrue}>Waive Discrepancies</button>  <button onClick={waivefalse}>Terminate The Contract</button> 
+         </div>
+         </body>
+         <body className="seller">
          <div>Seller Uploads to The Smart Contract: <button onClick={Seller}>Seller Upload</button>
          </div>
+         </body>
+         <body className="fintech">
+
          <div>
           Smart Contract Files: <input type="text" placeholder="Enter Hash" value={itemInput3} onChange={e => setItemInput3(e.target.value)}/>
         <button onClick={getContractFile}>See Contract Files</button>
          </div>
          <a id="myAnchor" href=""></a>
+         <div>
+           Fintech Set Compliance or Destroy Contract:  <button onClick={compliancetrue}>Compliance</button>  <button onClick={compliancefalse}>No Compliance</button> <button onClick={destroy}>Destroy Contract</button>
+         </div>
+         </body>
+
 
 
       </header>
 
     </div>
   );
-          
+ 
   
 }
 
