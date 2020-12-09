@@ -296,6 +296,41 @@ function App() {
   
   }
 
+  async function moneyupload() {
+
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.Ether_Upload();
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+  
+  }
+  async function withdraw() {
+
+
+
+    try {
+      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      await storageWithSigner.withdrawFunds();
+      
+    }
+    catch(err) {
+      console.log(err.message);
+      document.getElementById("text-box").className = "color-red";
+      document.getElementById("text-box").innerHTML = err.message
+    }
+    
+  
+  }
+
   
 
   async function getContractFile() {
@@ -376,7 +411,7 @@ function App() {
       </body>
 
 
-        <div {...getRootProps()} style={{"width" : "50%", "height" : "50%", "border" : "5px solid #191b1f", "margin" : "5px","padding" : "5px",cursor: "pointer", "background-color" :"rgb(25, 27, 31, 0.3)"}}>
+        <div {...getRootProps()} style={{"width" : "60%", "height" : "50%", "border" : "5px solid #191b1f", "margin" : "5px","padding" : "10px",cursor: "pointer", "background-color" :"rgb(25, 27, 31, 0.3)"}}>
           <img src={logo} className="App-logo" alt="react-logo" />
           <input {...getInputProps()} />
           {isDragActive ? (
@@ -413,12 +448,10 @@ function App() {
         </body>
         <body className="buyer">
         <div>
-         Buyer Sets Time and Uploads to The Smart Contract: <input type="text" placeholder="Enter Time" value={itemInput} onChange={e => setItemInput(e.target.value)}/>
+         Buyer Sets Time and Uploads to The Contract: <input type="text" placeholder="Enter Time" value={itemInput} onChange={e => setItemInput(e.target.value)}/>
          <button onClick={Buyer}>Buyer Upload</button>
         </div>
-        <div></div>
-      
-
+        <div>Buyer Uploads Money to The Contract: <button onClick={moneyupload}>Buyer Upload Money </button></div>
         <div>
         Buyer Extends Time:
         <input type="text" placeholder="Enter Time" value={itemInput1} onChange={e => setItemInput1(e.target.value)}/>
@@ -429,7 +462,7 @@ function App() {
          </div>
          </body>
          <body className="seller">
-         <div>Seller Uploads to The Smart Contract: <button onClick={Seller}>Seller Upload</button>
+         <div>Seller Uploads to The Contract: <button onClick={Seller}>Seller Upload</button>
          </div>
          </body>
          <body className="fintech">
@@ -442,6 +475,7 @@ function App() {
          <div>
            Fintech Set Compliance or Destroy Contract:  <button onClick={compliancetrue}>Compliance</button>  <button onClick={compliancefalse}>No Compliance</button> <button onClick={destroy}>Destroy Contract</button>
          </div>
+         <button onClick={withdraw}>Withdraw Funds</button>
          </body>
 
 

@@ -34,47 +34,47 @@
 }
 
 .buyer{
-  width : 50%; 
+  width : 60%; 
   height : 50%;
   border : 5px solid #191b1f;
   margin: 5px;
-  padding: 5px;
+  padding: 10px;
   background-color: rgb(25, 27, 31, 0.3);
 }
 
 .seller{
-  width : 50%; 
+  width : 60%; 
   height : 50%;
   border : 5px solid #191b1f;
   margin: 5px;
-  padding: 5px;
+  padding: 10px;
   background-color: rgb(25, 27, 31, 0.3);
 }
 
 .fintech{
-  width : 50%; 
+  width : 60%; 
   height : 50%;
   border : 5px solid #191b1f;
   margin: 5px;
-  padding: 5px;
+  padding: 10px;
   background-color: rgb(25, 27, 31, 0.3);
 }
 
 .info{
-  width : 50%; 
+  width : 60%; 
   height : 50%;
   border : 5px solid #191b1f;
   margin: 5px;
-  padding: 5px;
+  padding: 10px;
   background-color: rgb(25, 27, 31, 0.3);
 }
 
 .files{
-  width : 50%; 
+  width : 60%; 
   height : 50%;
   border : 5px solid #191b1f;
   margin: 5px;
-  padding: 5px;
+  padding: 10px;
   background-color: rgb(25, 27, 31, 0.3);
 }
 .color-red{
