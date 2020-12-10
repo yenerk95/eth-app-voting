@@ -455,7 +455,7 @@ function App() {
          Buyer Sets Time and Uploads to The Contract: <input type="text" placeholder="Enter Time" value={itemInput} onChange={e => setItemInput(e.target.value)}/>
          <button onClick={Buyer}>Buyer Upload</button>
         </div>
-        <div>(Not Working) Buyer Uploads Money to The Contract: <button onClick={moneyupload}>Buyer Upload Money </button></div>
+        <div>(Not Working, Send with Metamask) Buyer Uploads Money to The Contract: <button onClick={moneyupload}>Buyer Upload Money </button></div>
         <div>
         Buyer Extends Time:
         <input type="text" placeholder="Enter Time" value={itemInput1} onChange={e => setItemInput1(e.target.value)}/>
