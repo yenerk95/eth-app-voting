@@ -12,13 +12,15 @@ const ZERO_ADDRESS =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 let node;
- 
+
+var dict = {};
+
 const defaultProvider = new ethers.providers.Web3Provider(window.ethereum);
-const ipfsContract = new ethers.Contract(
-  addresses.ipfs,
-  abis.ipfs,
-  defaultProvider
-);
+//const ipfsContract = new ethers.Contract(
+ // addresses.ipfs,
+  //abis.ipfs,
+  //defaultProvider
+//);
 var storageContract;
 console.log( addresses.ipfs);
 
@@ -29,18 +31,17 @@ async function initIpfs() {
 }
 
 async function readCurrentUserFile() {
-  const result = await ipfsContract.userFiles(
-    defaultProvider.getSigner().getAddress()
+ // const result = await ipfsContrstact.userFiles(
+  //  defaultProvider.getSigner().getAddress()
     
   
-  );
-  console.log({ result });
+  //);
+ // console.log({ result });
  
   const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
   const account = accounts[0];//metamask current account
-
   
-  return result;
+  return dict[account];
 }
 async function getaccount(){
   const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -65,7 +66,7 @@ function App() {
     async function readFile() {
       const file = await readCurrentUserFile();
 
-      if (file !== ZERO_ADDRESS) setIpfsHash(file);
+      if (file !==undefined) setIpfsHash(file);
     }
     readFile();
   }, []);
@@ -89,13 +90,15 @@ function App() {
 
 
   async function setFile(hash) {
-    const ipfsWithSigner = ipfsContract.connect(defaultProvider.getSigner());
-    const tx = await ipfsWithSigner.setFile(hash);
-    console.log({ tx });
+    dict[accountHash]=hash;
+
+   // const ipfsWithSigner = ipfsContract.connect(defaultProvider.getSigner());
+   //const tx = await ipfsWithSigner.setFile(hash);
+   // console.log({ tx });
 
     setIpfsHash(hash);
     
-    ipfsWithSigner.store(hash);
+    //yipfsWithSigner.store(hash);
 
   
   }
@@ -216,7 +219,7 @@ function App() {
 
     try {
       const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-      await storageWithSigner.setCompliance(true);
+      await storageWithSigner.checkCompliance();
       
     }
     catch(err) {
@@ -228,23 +231,6 @@ function App() {
   
   }
 
-  async function compliancefalse() {
-
-
-
-    try {
-      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-      await storageWithSigner.setCompliance(false);
-      
-    }
-    catch(err) {
-      console.log(err.message);
-      document.getElementById("text-box").className = "color-red";
-      document.getElementById("text-box").innerHTML = err.message
-    }
-    
-  
-  }
 
   async function waivetrue() {
 
@@ -301,6 +287,24 @@ function App() {
 
 
     try {
+
+
+      // const transactionParameters = await{
+
+      //   gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+      //   gas: '0x2710', // customizable by user during MetaMask confirmation.
+      //   to: '', // Required except during contract publications.
+      //   from: window.ethereum.selectedAddress, // must match user's active address.
+      //   value: '0x6A94D74F430000', // Only required to send ether to the recipient from the initiating external account.
+
+      // };
+      
+      // // txHash is a hex string
+      // // As with any RPC call, it may throw an error
+      // const txHash = await window.ethereum.request({
+      //   method: 'eth_sendTransaction',
+      //   params: [transactionParameters],
+      // });
       const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
       await storageWithSigner.Ether_Upload();
       
@@ -397,12 +401,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <div id="text-box"></div>
-      <body className="info">
-      <div>
+       <div id="text-box"></div>
+       <body className="info">
+       <div>
           Smart Contract: <input type="text" placeholder="Contract Hash" value={itemInput2} onChange={e => setItemInput2(e.target.value)}/>
         <button onClick={SetContract}>Set</button>
-      </div>
+        </div>
       <div>Current User Hash: <mark className="mark-red">{accountHash}</mark></div>
 
       <div> <button onClick={status}>See Current Status</button> </div>
@@ -451,7 +455,7 @@ function App() {
          Buyer Sets Time and Uploads to The Contract: <input type="text" placeholder="Enter Time" value={itemInput} onChange={e => setItemInput(e.target.value)}/>
          <button onClick={Buyer}>Buyer Upload</button>
         </div>
-        <div>Buyer Uploads Money to The Contract: <button onClick={moneyupload}>Buyer Upload Money </button></div>
+        <div>(Not Working) Buyer Uploads Money to The Contract: <button onClick={moneyupload}>Buyer Upload Money </button></div>
         <div>
         Buyer Extends Time:
         <input type="text" placeholder="Enter Time" value={itemInput1} onChange={e => setItemInput1(e.target.value)}/>
@@ -467,15 +471,16 @@ function App() {
          </body>
          <body className="fintech">
 
-         <div>
-          Smart Contract Files: <input type="text" placeholder="Enter Hash" value={itemInput3} onChange={e => setItemInput3(e.target.value)}/>
-        <button onClick={getContractFile}>See Contract Files</button>
-         </div>
-         <a id="myAnchor" href=""></a>
-         <div>
-           Fintech Set Compliance or Destroy Contract:  <button onClick={compliancetrue}>Compliance</button>  <button onClick={compliancefalse}>No Compliance</button> <button onClick={destroy}>Destroy Contract</button>
-         </div>
-         <button onClick={withdraw}>Withdraw Funds</button>
+          <div>
+          Smart Contract Files: <input type="text" placeholder="Buyer or Seller Hash" value={itemInput3} onChange={e => setItemInput3(e.target.value)}/>
+          <button onClick={getContractFile}>See Contract Files</button>
+          </div>
+          <a id="myAnchor" href=""></a>
+          <div>
+          (Ballot is Needed) Fintech Check Compliance or Destroy Contract:  <button onClick={compliancetrue}>Check Compliance</button> <button onClick={destroy}>Destroy Contract</button>
+          </div>
+          <button onClick={withdraw}>Withdraw Funds</button>
+
          </body>
 
 
