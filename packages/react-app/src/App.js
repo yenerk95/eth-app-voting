@@ -289,24 +289,23 @@ function App() {
     try {
 
 
-      // const transactionParameters = await{
+      var transactionParameters = await{
 
-      //   gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-      //   gas: '0x2710', // customizable by user during MetaMask confirmation.
-      //   to: '', // Required except during contract publications.
-      //   from: window.ethereum.selectedAddress, // must match user's active address.
-      //   value: '0x6A94D74F430000', // Only required to send ether to the recipient from the initiating external account.
+        to: itemInput2.toString(), // Required except during contract publications.
+        from: window.ethereum.selectedAddress, // must match user's active address.
+        value: '0x'+(itemInput4*1000000000000000000).toString(16)
 
-      // };
+
+      };
       
-      // // txHash is a hex string
-      // // As with any RPC call, it may throw an error
-      // const txHash = await window.ethereum.request({
-      //   method: 'eth_sendTransaction',
-      //   params: [transactionParameters],
-      // });
-      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-      await storageWithSigner.Ether_Upload();
+      // txHash is a hex string
+      // As with any RPC call, it may throw an error
+      const txHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      });
+      // const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
+      // await storageWithSigner.Ether_Upload();
       
     }
     catch(err) {
@@ -394,6 +393,8 @@ function App() {
   console.log(itemInput2);
   const [itemInput3, setItemInput3] = useState("");
   console.log(itemInput3);
+  const [itemInput4, setItemInput4] = useState("");
+  console.log(itemInput4);
 
   
 
@@ -455,7 +456,7 @@ function App() {
          Buyer Sets Time and Uploads to The Contract: <input type="text" placeholder="Enter Time" value={itemInput} onChange={e => setItemInput(e.target.value)}/>
          <button onClick={Buyer}>Buyer Upload</button>
         </div>
-        <div>(Not Working, Send with Metamask) Buyer Uploads Money to The Contract: <button onClick={moneyupload}>Buyer Upload Money </button></div>
+        <div>Buyer Uploads Money to The Contract: <input type="text" placeholder="Enter ETH Amount" value={itemInput4} onChange={e => setItemInput4(e.target.value)}/><button onClick={moneyupload}>Buyer Upload Money </button></div>
         <div>
         Buyer Extends Time:
         <input type="text" placeholder="Enter Time" value={itemInput1} onChange={e => setItemInput1(e.target.value)}/>
