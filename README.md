@@ -4,6 +4,9 @@ This project was bootstrapped with [Create Eth App](https://github.com/paulrberg
 
 https://eth-app.yenerk95.vercel.app/
 
+(Metamask is required)
+
+
 
 
 
