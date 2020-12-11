@@ -10,4 +10,3 @@ https://eth-app.yenerk95.vercel.app/
 
 
 
-![](images/eth-app-webpage.png)
