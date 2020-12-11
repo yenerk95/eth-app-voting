@@ -33,7 +33,7 @@
   background: none;
 }
 
-.buyer{
+.banks{
   width : 60%; 
   height : 50%;
   border : 5px solid #191b1f;
@@ -42,14 +42,6 @@
   background-color: rgb(25, 27, 31, 0.3);
 }
 
-.seller{
-  width : 60%; 
-  height : 50%;
-  border : 5px solid #191b1f;
-  margin: 5px;
-  padding: 10px;
-  background-color: rgb(25, 27, 31, 0.3);
-}
 
 .fintech{
   width : 60%; 
@@ -69,14 +61,7 @@
   background-color: rgb(25, 27, 31, 0.3);
 }
 
-.files{
-  width : 60%; 
-  height : 50%;
-  border : 5px solid #191b1f;
-  margin: 5px;
-  padding: 10px;
-  background-color: rgb(25, 27, 31, 0.3);
-}
+
 .color-red{
   color: #F00;
 }
