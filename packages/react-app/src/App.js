@@ -68,23 +68,6 @@ function App() {
   
   }
 
-
-  async function Buyer() {
-
-  
-    try {
-      const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-      await storageWithSigner.buyerUpload(1,itemInput);
-      
-    }
-    catch(err) {
-      console.log(err.message);
-      document.getElementById("text-box").className = "color-red";
-      document.getElementById("text-box").innerHTML = err.message
-    }
-    
-  
-  }
  
 
 
