@@ -128,7 +128,7 @@ function App() {
 
     try {
       const storageWithSigner = storageContract.connect(defaultProvider.getSigner());
-      await storageWithSigner.ExtendTime(itemInput3);
+      await storageWithSigner.VotingEndTime(itemInput3);
       
     }
     catch(err) {
